@@ -1,2 +1,2 @@
 # Reminder-API
-Simple api to add reminders
+Simple API to add reminders
