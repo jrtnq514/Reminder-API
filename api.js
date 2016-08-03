@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var comb = require('comb');
+var emailHelper = require('./helpers/email_helper');
+var cronHelper = require('./helpers/cron_helper');
 
 // comb logger
 // TODO configure log output and levels
@@ -20,6 +22,12 @@ api.use(bodyParser.urlencoded({ extended: false }));
 
 // route paths
 api.use('/', reminderRoutes);
+
+// setup emailhelper
+emailHelper.init();
+
+// start cron job
+cronHelper.init();
 
 // catch 404 and forward to error handler
 // api.use(function(req, res, next) {

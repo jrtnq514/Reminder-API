@@ -4,7 +4,8 @@
 
 var comb = require('comb');
 var patio = require('patio');
-
+var moment = require('moment');
+var emailHelper = require('../helpers/email_helper');
 
 var logger = comb.logger('api.dao.reminder');
 
@@ -47,6 +48,29 @@ function addNewReminder(newReminder) {
 
 }
 
+
+
+
+
+
+function cronReminder() {
+    init();
+    // get reminders for the next n time
+    var Reminder = patio.addModel('reminder');
+
+    var nowPlus1 = moment().add(1, 'minutes').format('YYYY-MM-DD HH:mm:00');
+
+    // get all the reminders for the next minute
+    Reminder.sync().chain(function () {
+        Reminder.filter({datetime : nowPlus1}).forEach(function (reminder) {
+            emailHelper.sendEmail(reminder);
+        });
+    }).chain(function (err) {
+        logger.error(err.message);
+    });
+}
+
 module.exports = {
-    addNewReminder: addNewReminder
+    addNewReminder: addNewReminder,
+    cronReminder: cronReminder
 }
