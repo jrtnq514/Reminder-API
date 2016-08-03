@@ -26,8 +26,9 @@ api.use('/', reminderRoutes);
 // setup emailhelper
 emailHelper.init();
 
-// start cron job
-cronHelper.init();
+// start cron jobs
+cronHelper.remind();
+cronHelper.cleanup();
 
 // catch 404 and forward to error handler
 // api.use(function(req, res, next) {

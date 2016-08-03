@@ -10,41 +10,68 @@ var reminderDao = require('../dao/reminder_dao');
 // logger
 var logger = comb.logger('api.helpers.cronHelper');
 
-function init() {
+/* clean up old notifications */
+function cleanup() {
     try {
-        new CronJob(cronConfig.pattern, function() {
+        new CronJob(cronConfig.cleanup.pattern, function() {
             logger.info("Valid Cron pattern");
         })
     } catch(ex) {
-        logger.error("Invalid Cron pattern");
+        logger.error("Invalid Cron pattern (cleanup)");
         return;
     }
 
     var cronJob = new CronJob({
-        cronTime: cronConfig.pattern,
+        cronTime: cronConfig.cleanup.pattern,
         onTick: function() {
-            /*
-             * Runs every weekday (Monday through Friday)
-             * at 11:30:00 AM. It does not run on Saturday
-             * or Sunday.
-             */
-            logger.info("Cron tick");
-            reminderDao.cronReminder();
+            logger.info("cleanup");
+            reminderDao.cleanup();
         },
         onComplete: function () {
 
         },
         runOnInit: function () {
-            reminderDao.cronReminder();
+            reminderDao.cleanup();
         },
         start: false,
         timeZone: cronConfig.timezone
     });
     cronJob.start();
-    logger.info("Started cron job");
+    logger.info("Started cleanup cron job");
+}
+
+/* Send out notifications */
+function remind() {
+    try {
+        new CronJob(cronConfig.remind.pattern, function() {
+            logger.info("Valid Cron pattern");
+        })
+    } catch(ex) {
+        logger.error("Invalid Cron pattern (notify)");
+        return;
+    }
+
+    var cronJob = new CronJob({
+        cronTime: cronConfig.remind.pattern,
+        onTick: function() {
+            logger.info("notify");
+            reminderDao.remind();
+        },
+        onComplete: function () {
+
+        },
+        runOnInit: function () {
+            reminderDao.notify();
+        },
+        start: false,
+        timeZone: cronConfig.timezone
+    });
+    cronJob.start();
+    logger.info("Started notify cron job");
 
 }
 
 module.exports = {
-    init: init
+    remind: remind,
+    cleanup: cleanup
 };

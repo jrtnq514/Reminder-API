@@ -11,7 +11,7 @@ var logger = comb.logger('api.dao.reminder');
 
 // patio logging
 patio.configureLogging();
-patio.LOGGER.level = "DEBUG";
+patio.LOGGER.level = "WARN";
 
 //disconnect and error callback helpers
 var disconnect = patio.disconnect.bind(patio);
@@ -53,16 +53,17 @@ function addNewReminder(newReminder) {
 
 
 
-function cronReminder() {
+function remind() {
     init();
     // get reminders for the next n time
     var Reminder = patio.addModel('reminder');
 
-    var nowPlus1 = moment().add(1, 'minutes').format('YYYY-MM-DD HH:mm:00');
+    // var nowPlus1Min = moment().add(1, 'minutes').format('YYYY-MM-DD HH:mm:00');
+    var now = moment().format('YYYY-MM-DD HH:mm:00');
 
     // get all the reminders for the next minute
     Reminder.sync().chain(function () {
-        Reminder.filter({datetime : nowPlus1}).forEach(function (reminder) {
+        Reminder.filter({datetime : now}).forEach(function (reminder) {
             emailHelper.sendEmail(reminder);
         });
     }).chain(function (err) {
@@ -70,7 +71,26 @@ function cronReminder() {
     });
 }
 
+function cleanup() {
+    init();
+
+    // delete reminders older than an hour
+    var Reminder = patio.addModel('reminder');
+
+    var nowMinus1Hour = moment().add(-1, 'hours').format('YYYY-MM-DD HH:mm:00');
+
+    // delete all the reminders older than an hour
+    Reminder.sync().chain(function () {
+        return Reminder.filter("datetime < ?", nowMinus1Hour).from("reminder").remove();
+    }).chain(function () {
+        logger.info("clean up completed");
+    }).chain(function (err) {
+        logger.error(err.message);
+    });
+}
+
 module.exports = {
     addNewReminder: addNewReminder,
-    cronReminder: cronReminder
+    remind: remind,
+    cleanup: cleanup
 }

@@ -15,6 +15,8 @@ var Reminder = comb.define({
         _datetime : null,
         _email : null,
 
+        //TODO event time, reminder time, effective time
+
         // constructor
         constructor : function (options) {
             options = options || {};

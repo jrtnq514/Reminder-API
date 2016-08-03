@@ -1,0 +1,17 @@
+stuff to look at
+
+- json-server
+- hapijs
+- nightwatchjs
+- hotel
+- mocha
+
+
+TODO
+- encryption
+- add fields (alert offset)
+- update SQL add defaults
+- post take JSON
+- cron job to clean up old messages -DONE
+- unit tests (mocha)
+- email template
