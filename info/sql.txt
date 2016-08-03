@@ -1,0 +1,18 @@
+-- Table: public.reminder
+
+-- DROP TABLE public.reminder;
+
+CREATE TABLE public.reminder
+(
+  id integer NOT NULL DEFAULT nextval('reminder_id_seq'::regclass),
+  title character varying(100) NOT NULL,
+  description text,
+  datetime timestamp without time zone NOT NULL,
+  email text NOT NULL,
+  CONSTRAINT reminder_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.reminder
+  OWNER TO postgres;
