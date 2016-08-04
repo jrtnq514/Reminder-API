@@ -15,3 +15,4 @@ TODO
 - cron job to clean up old messages -DONE
 - unit tests (mocha)
 - email template
+- queue out-going notifications from DB
