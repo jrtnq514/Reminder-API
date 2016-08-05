@@ -1,2 +1,2 @@
 # Reminder-API
-Simple API to add reminders
+Simple API to add and be notified for one-time reminders
