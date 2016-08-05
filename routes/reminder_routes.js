@@ -18,6 +18,9 @@ reminderRouter.route('/reminder')
     /* Get reminder */
     .get(function (req, res, next) {
         logger.info("In GET /reminder");
+
+
+
         res.send("GET");
     })
 
@@ -32,7 +35,7 @@ reminderRouter.route('/reminder')
 
         // check date is valid
         var now = moment();
-        datetime = moment(req.body.datetime, 'YYYY-MM-DD HH:mm:ss');
+        datetime = moment(req.body.datetime, ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DDTHH:mm']);
         if (!datetime.isValid() || datetime <= now) {
             // throw new Error("Invalid datetime");
             return res.status(400).json({ 'error': 'Invalid datetime' });
