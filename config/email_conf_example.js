@@ -5,7 +5,7 @@ var emailConfig = {};
 
 // TODO add encryption
 emailConfig.user = 'user@gmail.com';
-emailConfig.pass = 'Pass';
+emailConfig.pass = 'pass';
 
 
 module.exports = emailConfig;

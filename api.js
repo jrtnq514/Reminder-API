@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var comb = require('comb');
+var helmet = require('helmet');
 var emailHelper = require('./helpers/email_helper');
 var cronHelper = require('./helpers/cron_helper');
 
@@ -15,6 +16,9 @@ var api = express();
 
 var port = normalizePort(process.env.PORT || '3002');
 api.set('port', port);
+
+// security
+api.use(helmet());
 
 
 api.use(bodyParser.json());
